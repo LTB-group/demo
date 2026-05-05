@@ -1,0 +1,103 @@
+CREATE DATABASE HospitalTechDB;
+GO
+
+USE HospitalTechDB;
+GO
+
+CREATE TABLE Roles (
+    RoleId INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Users (
+    UserId INT IDENTITY(1,1) PRIMARY KEY,
+    FullName NVARCHAR(150) NOT NULL,
+    Login NVARCHAR(100) NOT NULL UNIQUE,
+    Password NVARCHAR(100) NOT NULL,
+    RoleId INT NOT NULL FOREIGN KEY REFERENCES Roles(RoleId)
+);
+
+CREATE TABLE Manufacturers (
+    ManufacturerId INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Categories (
+    CategoryId INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Locations (
+    LocationId INT IDENTITY(1,1) PRIMARY KEY,
+    Address NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Products (
+    ProductCode NVARCHAR(20) PRIMARY KEY,
+    Name NVARCHAR(150) NOT NULL,
+    Price DECIMAL(18,2) NOT NULL,
+    ManufacturerId INT NOT NULL FOREIGN KEY REFERENCES Manufacturers(ManufacturerId),
+    CategoryId INT NOT NULL FOREIGN KEY REFERENCES Categories(CategoryId),
+    DiscountAmount INT NOT NULL DEFAULT 0,
+    LocationId INT NOT NULL FOREIGN KEY REFERENCES Locations(LocationId),
+    Description NVARCHAR(MAX),
+    PhotoPath NVARCHAR(255)
+);
+GO
+
+INSERT INTO Roles (RoleName) VALUES 
+(N'Администратор'), 
+(N'Заказчик');
+
+INSERT INTO Users (FullName, Login, Password, RoleId) VALUES 
+(N'Басова Амина Кирилловна', N'klh7pi4rcbtz@gmail.com', N'2L6KZG', 1),
+(N'Михайлов Андрей Денисович', N'gn0354mbiork@outlook.com', N'uzWC67', 1),
+(N'Сидоров Егор Александрович', N'1o4l05k8dwpv@yahoo.com', N'8ntwUp', 1),
+(N'Васильева Василиса Фёдоровна', N'01zji3wfuq7h@outlook.com', N'LdNyos', 2),
+(N'Кудрявцева Василиса Матвеевна', N'am65k18q7bwp@mail.com', N'gynQMT', 2),
+(N'Кириллова Николь Святославовна', N'wt9q8i6ypx47@outlook.com', N'AtnDjr', 2),
+(N'Андреева Полина Артёмовна', N'4o72gufv3xlz@tutanota.com', N'JlFRCZ', 2);
+
+INSERT INTO Manufacturers (Name) VALUES 
+(N'Китай'),
+(N'Корея'),
+(N'Япония'),
+(N'США'),
+(N'Сингапур');
+
+INSERT INTO Categories (Name) VALUES 
+(N'общее'),
+(N'сердце'),
+(N'кровь'),
+(N'кости'),
+(N'Аксессуары');
+
+INSERT INTO Locations (Address) VALUES 
+(N'Москва, ул. Тверская, д. 12'),
+(N'Санкт-Петербург, наб. реки Мойки, д. 34'),
+(N'Екатеринбург, ул. Ленина, д. 56'),
+(N'Новосибирск, Красный проспект, д. 78'),
+(N'Краснодар, ул. Северная, д. 90'),
+(N'Сочи, Курортный проспект, д. 112'),
+(N'Ростов-на-Дону, Большая Садовая улица, д. 134'),
+(N'Самара, Московское шоссе, д. 156'),
+(N'Казань, ул. Баумана, д. 178'),
+(N'Омск, ул. Пушкина, д. 190'),
+(N'Челябинск, Свердловский проспект, д. 212'),
+(N'Уфа, Проспект Октября, д. 234'),
+(N'Красноярск, ул. Карла Маркса, д. 256'),
+(N'Иркутск, ул.Луговая 24');
+
+INSERT INTO Products (ProductCode, Price, Name, ManufacturerId, CategoryId, DiscountAmount, LocationId, Description, PhotoPath) VALUES 
+(N'А112Т4', 99990, N'Инфузионные насосы', 1, 1, 3, 6, N'устройства для контролируемого введения лекарственных средств и жидкостей.', N'1.png'),
+(N'F635R4', 35000, N'Электрокардиографы', 2, 2, 2, 2, N'аппараты для регистрации электрической активности сердца', N'2.png'),
+(N'H782T5', 6500, N'Пульсоксиметры', 3, 3, 4, 9, N'устройства для измерения уровня насыщения кислородом в крови и пульса пациента', N'3.png'),
+(N'G783F5', 25000, N'Аппараты УЗИ', 4, 1, 2, 10, N'оборудование для ультразвуковой диагностики.', N'4.png'),
+(N'J384T6', 9500, N'Эндоскопы', 5, 1, 2, 9, N'используются при нарушении дыхания.', N'5.png'),
+(N'S213E3', 55000, N'Аппараты для гемодиализа', 4, 3, 3, 6, N'устройства для очистки крови при почечной недостаточности', N'10.png'),
+(N'E482R4', 20000, N'Роботизированные системы в хирургии', 1, 1, 2, 7, N'инновационное оборудование для высокоточного хирургического вмешательства.', NULL),
+(N'S634B5', 28000, N'Аппараты для ударно-волновой терапии', 2, 4, 3, 4, N'используются для лечения различных заболеваний.', NULL),
+(N'K345R4', 1500, N'Массажные столы и кушетки', 3, 1, 2, 7, N'оборудование для физиотерапевтических процедур', NULL),
+(N'O754F4', 16000, N'Акушерские кровати', 1, 5, 4, 10, N'специальные кровати для родовспоможения', NULL),
+(N'G531F4', 6000, N'Дезинфекционные кипятильники', 2, 1, 12, 2, N'оборудование для обработки инструментов и поверхностей', NULL);
+GO
